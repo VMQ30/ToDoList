@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () =>{
     mainPanel.addEventListener("click", ()=>{
         if(sidebar.classList.contains("visible")){
             sidebar.classList.remove("visible");
-             console.log("Sidebar hidden");
+            mainPanel.classList.remove("visible-sidebar");
         }
     })
 })
