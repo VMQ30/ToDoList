@@ -36,19 +36,20 @@ function createTodoList(title, description, dueDate, important, haveFinished, to
 document.addEventListener("DOMContentLoaded", () =>{
     
     const menuButton = document.querySelector(".menu-button");
-    const mainPanel = document.querySelector('.main');
+    const mainPanel = document.querySelector(".main-panel");
     let sidebar = document.querySelector(".sidebar");
+
     menuButton.addEventListener("click", ()=>{
         sidebar.classList.toggle("visible");
+        mainPanel.classList.toggle("visible-sidebar");
     })
-
-    if(sidebar.classList.contains("visible")){
-        console.log("true");
-        mainPanel.addEventListener("click", ()=>{
-            console.log("hello");
+    
+    mainPanel.addEventListener("click", ()=>{
+        if(sidebar.classList.contains("visible")){
             sidebar.classList.remove("visible");
-        })
-    }
+             console.log("Sidebar hidden");
+        }
+    })
 })
 
 console.log("hello");
