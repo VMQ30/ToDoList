@@ -8,7 +8,7 @@
 *{
     margin:0;
     padding: 0;
-    box-sizing: content-box;
+    box-sizing: border-box;
 }
 
 body{
@@ -59,18 +59,19 @@ header input{
 aside{
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     width: 20vw;
-    height: 90%;
+    height: 89vh;
     color:white;
     background-color: rgb(141, 8, 8);
-    /* display: flex;
-    justify-content: center;
-    align-items:start;
-    flex-wrap: wrap; */
     padding: 10px;
-    padding-bottom:20px;
+
+    position:fixed;
+    bottom:0;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
 }
 
 aside div{
+    box-sizing: content-box;
     display: flex;
     width:100%;
     flex-wrap: wrap;
@@ -125,6 +126,7 @@ aside div{
 
 .home-buttons button,
 .project-list button{
+    box-sizing: content-box;
     margin:0 auto;
     width: 70%;
     height: 4vh;
@@ -151,6 +153,10 @@ aside div{
     color:white;
     overflow-y:auto;
     
+}
+
+.visible{
+    transform: translateX(0%);
 }
 
 button{
