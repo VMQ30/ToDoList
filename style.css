@@ -160,7 +160,7 @@ main{
     display: flex;
     justify-content: center;
     align-items: center;
-    border-bottom: 2px solid rgb(97, 136, 255);
+    border-bottom: 2px solid rgb(155, 180, 255);
 
 }
 
@@ -177,7 +177,7 @@ main{
     display: flex;
     justify-content: space-around;
     align-items: center;
-    border-bottom: 2px solid rgb(97, 136, 255);
+    border-bottom: 2px solid rgb(155, 180, 255);
 }
 
 .task-header button{
@@ -197,6 +197,22 @@ main{
     color:rgb(97, 136, 255);
     font-weight:normal;
     font-size:2em;
+}
+
+.task-content{
+    height: 60vh;
+    overflow-y: scroll;
+}
+
+.task-content p{
+    color:rgb(97, 136, 255);
+    line-height: 55px;
+    border-bottom: solid 2px;
+    border-bottom-color: rgb(155, 180, 255);
+    width:100%;
+    font-family: "ShadowsIntoLight";
+    font-size: 30px;
+    font-weight:500;
 }
 
 button:hover{
@@ -224,14 +240,4 @@ button{
 /* div{
     display: flex;
     width:100%;
-} */
-/* p{
-    color:rgb(156, 156, 209);
-    line-height: 60px;
-    border-bottom: solid 2px;
-    border-bottom-color: rgb(140, 140, 224);
-    width:100%;
-    font-family: "ShadowsIntoLight";
-    font-size: 30px;
-    font-weight:500;
 } */
