@@ -14,7 +14,10 @@
 body{
     background-color: #fff79a;
     overflow-y: hidden;
-    
+    margin:0;
+    display: flex;
+    height: 100vh;
+    flex-direction: column;
 }
 
 header{
@@ -28,7 +31,7 @@ header{
     font-size: large;
     border-bottom: 5px solid;
     border-bottom-color: rgb(141, 8, 8);
-
+    letter-spacing: 3px;
     box-shadow: inset 7px 7px 5px rgb(255, 72, 72),
                 inset -7px -7px 5px rgb(145, 9, 9);
 }
@@ -46,6 +49,7 @@ header button{
 
 header button:hover{
     background-color: rgba(0,0,0,0.3);
+
 }
 
 header input{
@@ -55,14 +59,15 @@ header input{
 aside{
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     width: 20vw;
-    height: 100vh;
+    height: 90%;
     color:white;
     background-color: rgb(141, 8, 8);
-    display: flex;
+    /* display: flex;
     justify-content: center;
-    align-items: flex-start;
-    flex-wrap: wrap;
+    align-items:start;
+    flex-wrap: wrap; */
     padding: 10px;
+    padding-bottom:20px;
 }
 
 aside div{
@@ -74,26 +79,103 @@ aside div{
 .home{
     justify-content: center;
     align-items: center;
+    margin-bottom:20px;
 }
 
-.home-header{
+.projects{
+    height: 43%;
+}
+
+.home-header,
+.project-header{
     border-bottom:2px solid;
     border-bottom-color: white;
     margin-bottom:10px;
+    display: flex;
+    justify-content: space-between;
 }
-.home-header h3{
+.home-header h3,
+.project-header h3{
     line-height:1.5em;
     font-size: 2em;
 }
 
-.home-button
+.project-header button{
+    font-size: 2em;
+    border: none;
+    padding: 0 10px;
+    cursor: pointer;
+    color:white;
+    background-color: transparent;
+    margin-bottom: 5px;
+    border-radius: 3px;
+}
 
+.project-header button:hover{
+    background-color: rgba(0,0,0,0.3);
+
+}
+
+.home-buttons{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.home-buttons button,
+.project-list button{
+    margin:0 auto;
+    width: 70%;
+    height: 4vh;
+    margin-bottom: 10px;
+    cursor: pointer;
+    font-family: "ShadowsIntoLight";
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    background-color: transparent;
+    padding: 5px 0;
+    letter-spacing: 3px;
+    border-style:ridge;
+    border-color: white;
+}
+
+.home-buttons button:hover,
+.project-list button:hover{
+    background-color: rgba(0,0,0,0.3);
+}
+
+.project-list{
+    height: 80%;
+    color:white;
+    overflow-y:auto;
+    
+}
+
+button{
+    transition: background-color ease-in-out 0.3s;
+}
+
+::-webkit-scrollbar{
+    width:10px;
+}
+
+::-webkit-scrollbar-thumb{
+    background:white;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+    border:1px ridge white;
+    box-shadow: inset 0 0 3px rgb(73, 0, 0);
+}
 
 /* div{
     display: flex;
     width:100%;
 } */
-p{
+/* p{
     color:rgb(156, 156, 209);
     line-height: 60px;
     border-bottom: solid 2px;
@@ -102,4 +184,4 @@ p{
     font-family: "ShadowsIntoLight";
     font-size: 30px;
     font-weight:500;
-}
+} */
