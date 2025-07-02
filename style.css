@@ -315,6 +315,7 @@ textarea{
 
 textarea{
     height: 10vw;
+    resize: none;
 }
 
 .modal-container input, 
@@ -334,6 +335,11 @@ textarea:focus,
 select:focus{
     outline: 3px solid;
     outline-color: white;
+}
+
+.todo-project option:checked{
+    background: rgb(255, 72, 72);
+    color:white;
 }
 
 .todo-priority{
@@ -410,7 +416,10 @@ button{
     transition: all ease-in-out 0.3s;
 }
 
+.button-selected{
+    outline: solid 3px white;
+}
+
 .modal::selection{
     background-color: rgb(255, 72, 72);
 }
-
