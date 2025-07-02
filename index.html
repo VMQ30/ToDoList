@@ -72,7 +72,7 @@
 
         <div class = "task-header">
             <h2>Tasks(n)</h2>
-            <button>+</button>
+            <button class = "add-task">+</button>
         </div>
         
         <div class = "task-content">
@@ -88,6 +88,55 @@
         </div>
 
     </main>
+    
+    <div class = "modal-background">
+        <div class = "modal">
+            <div class = "modal-header">
+                <h1>New Task</h1>
+                <button class = "modal-exit">X</button>
+            </div>
+
+            <div class = "modal-body">
+                <div class = "modal-column1">
+                    <div class = "modal-container">
+                        <label for="todo-title">*Title:</label>
+                        <input type="text" name="todo-title" id="todo-title">
+                    </div>
+
+                    <div class = "modal-container">
+                        <label for="todo-description">*Description:</label>
+                        <textarea name="todo-description" class = "todo-description" id="todo-description"></textarea>
+                    </div>
+                </div>
+
+                <div class = "modal-column2">
+                    <div class = "modal-container">
+                        <label for="todo-due">*Due Date:</label>
+                        <input type="datetime-local" name="todo-due" id="todo-due">
+                    </div>
+
+                    <div class = "modal-container-button">
+                        <legend>*Priority:</legend>
+                        <div class = "todo-priority" name = "todo-priority">
+                            <button class = "priority-button">Low</button>
+                            <button class = "priority-button">Medium</button>
+                            <button class = "priority-button">High</button>
+                        </div>
+                    </div>
+
+                    <div class = "modal-container">
+                        <legend>*Project:</legend>
+                        <select class = 'todo-project'>
+                            <option></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class = "modal-footer">
+                <button class = 'save-todo'>Save</button>
+            </div>
+        </div>
+    </div>
     <script src = "script.js"></script>
 </body>
 </html>

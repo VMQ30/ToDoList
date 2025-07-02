@@ -33,8 +33,7 @@ function createTodoList(title, description, dueDate, important, haveFinished, to
     todoList.push(newTodo);
 }
 
-document.addEventListener("DOMContentLoaded", () =>{
-    
+function openCloseSidebar(){
     const menuButton = document.querySelector(".menu-button");
     const mainPanel = document.querySelector(".main-panel");
     let sidebar = document.querySelector(".sidebar");
@@ -50,8 +49,45 @@ document.addEventListener("DOMContentLoaded", () =>{
             mainPanel.classList.remove("visible-sidebar");
         }
     })
-})
+}
 
-console.log("hello");
+function closeModal(){
+    const modal = document.querySelector(".modal-background");
+    const closeButton = document.querySelector(".modal-exit");
+    const modalBody = document.querySelector(".modal");
+
+    closeButton.addEventListener("click", () =>{
+        modal.style.transform = "translateY(-100%)";
+        modalBody.style.transform = "translateY(-100%)";
+    })
+
+    modal.addEventListener("click", () =>{
+        modal.style.transform = "translateY(-100%)";
+        modalBody.style.transform = "translateY(-100%)";
+    })
+
+    modalBody.addEventListener("click", (event) =>{
+        event.stopPropagation();
+    })
+}
+
+function openAddTaskModal(){
+    const addButton = document.querySelector('.add-task');
+    const modal = document.querySelector(".modal-background");
+    const modalBody = document.querySelector(".modal");
+    
+    addButton.addEventListener("click", () =>{
+        modal.style.transform = "translateY(0)";
+        modalBody.style.transform = "translateY(0)";
+    })
+
+
+}
+
+(function(){
+    openCloseSidebar();
+    closeModal();
+    openAddTaskModal();
+})();
 
 
