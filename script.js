@@ -141,6 +141,14 @@ function showAllTask(todoList){
 
             taskList.appendChild(taskItem);
             numberOfTask++;
+
+            deleteButton.addEventListener("click", () => {
+                if(confirm("Are you sure you wish to delete this to-do task?")){
+                    deleteTask(index, todoList);
+                    showAllTask(todoList);
+                }
+            });
+
         })
         mainPanelHeader("All Tasks", numberOfTask, todoList);
     })    
@@ -197,6 +205,13 @@ function showTodayTask(todoList){
 
                 taskList.appendChild(taskItem);
                 numberOfTask++;
+
+                deleteButton.addEventListener("click", () => {
+                    if(confirm("Are you sure you wish to delete this to-do task?")){
+                        deleteTask(index, todoList);
+                        showTodayTask(todoList);
+                    }
+                });
             }
             
         })
@@ -212,7 +227,7 @@ function showImportantTask(todoList){
     importantButton.addEventListener("click", () =>{
         taskList.innerHTML = "";
         todoList.forEach((item, index) =>{
-            if(index = 0){
+            if(index == 0){
                 numberOfTask = 0;
             }
 
@@ -250,6 +265,13 @@ function showImportantTask(todoList){
 
                 taskList.appendChild(taskItem);
                 numberOfTask++;
+
+                deleteButton.addEventListener("click", () => {
+                    if(confirm("Are you sure you wish to delete this to-do task?")){
+                        deleteTask(index, todoList);
+                        showImportantTask(todoList);
+                    }
+                });
             }
         })
         mainPanelHeader("Important Tasks", numberOfTask, todoList);
