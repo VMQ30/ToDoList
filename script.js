@@ -27,7 +27,6 @@ class Todo{
 function createProjectList(projectList, projectName){
     const newProject = new Project(projectName, []);
     projectList.push(newProject);
-    
 }
 
 function createTodoList(title, description, dueDate, priority, haveFinished, project, todoList){
@@ -43,7 +42,6 @@ function addTodoItem(todoList, getPriorityValue){
     if(priority == null){
         alert("Set a priority for your to-do item");
     }
-
     else{
         createTodoList(title, description, dueDate, priority, "false", project, todoList);
     }
@@ -86,6 +84,41 @@ function getNewTodoValues(){
     const project = document.getElementById("todo-project").value;
 
     return{title, description, dueDate, project};
+}
+
+
+
+
+
+//DOM
+
+function showAllTask(todoList){
+    const allButton = document.querySelector(".all");
+    const taskList = document.querySelector(".task-content");
+
+    allButton.addEventListener("click", () =>{
+        taskList.innerHTML = "";
+
+        todoList.forEach((item) =>{
+            const title = item.title;
+            const todoItem = document.createElement("p");
+            todoItem.textContent = title;
+            taskList.appendChild(todoItem);
+        })
+    })
+}
+
+function mainPanelHeader(){
+    const mainPanel = document.querySelector('main-panel');
+    mainPanel.innerHtml = 
+    `<div class = "header">
+        <h1>${title}</h1>
+    </div>
+
+    <div class = "task-header">
+        <h2>Tasks(${numberOfTask})</h2>
+        <button class = "add-task">+</button>
+    </div>`
 }
 
 function stylePriorityButton(){
@@ -234,6 +267,7 @@ function clearModal(){
     let todoList = JSON.parse(localStorage.getItem("todoList")) || [];
     openCloseSidebar();
     openAddTaskModal(todoList);
+    showAllTask(todoList);
 })();
 
 
