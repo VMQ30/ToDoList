@@ -36,56 +36,82 @@ function createTodoList(title, description, dueDate, priority, haveFinished, pro
     localStorage.setItem("todoList", JSON.stringify(todoList));
 }
 
-function addTodoItem(todoList){
-    let priority;
+function addTodoItem(todoList, getPriorityValue){
+    const {title, description, dueDate, project} = getNewTodoValues();
+    const priority = getPriorityValue();
 
+    if(priority == null){
+        alert("Set a priority for your to-do item");
+    }
+
+    else{
+        createTodoList(title, description, dueDate, priority, "false", project, todoList);
+    }
+}
+
+function getPriority(){
+    let priority;
     const low = document.getElementById('low');
     const high = document.getElementById('high');
     const med = document.getElementById('med');
 
-    const saveButton = document.querySelector(".save-todo");
-
     low.addEventListener("click", () =>{
         priority = "low";
+    })
+    med.addEventListener("click", () =>{
+        priority = 'medium';
+    })
+    high.addEventListener("click", () =>{
+        priority = "high";
+    })
+
+    return () => priority;
+}
+
+function saveTodoItem(todoList){
+    const getPriorityValue = getPriority();
+    const saveButton = document.querySelector(".save-todo");
+    saveButton.addEventListener("click", (event) =>{
+        event.preventDefault();
+        addTodoItem(todoList, getPriorityValue);
+        clearModal();
+        alert("Successfully added to-do item in your list!");
+    })
+}
+
+function getNewTodoValues(){
+    const title = document.getElementById("todo-title").value;
+    const description = document.getElementById("todo-description").value;
+    const dueDate = document.getElementById("todo-due").value;
+    const project = document.getElementById("todo-project").value;
+
+    return{title, description, dueDate, project};
+}
+
+function stylePriorityButton(){
+    const low = document.getElementById('low');
+    const high = document.getElementById('high');
+    const med = document.getElementById('med');
+
+    low.addEventListener("click", () =>{
         med.classList.remove("button-selected");
         high.classList.remove("button-selected");
         low.classList.add("button-selected");
-        
     })
 
     med.addEventListener("click", () =>{
-        priority = 'medium';
         low.classList.remove("button-selected");
         high.classList.remove("button-selected");
         med.classList.add("button-selected");
     })
 
     high.addEventListener("click", () =>{
-        priority = "high";
         low.classList.remove("button-selected");
         med.classList.remove("button-selected");
         high.classList.add("button-selected");
     })
-
-    saveButton.addEventListener("click", () =>{
-        event.preventDefault();
-        const title = document.getElementById("todo-title").value;
-        const description = document.getElementById("todo-description").value;
-        const dueDate = document.getElementById("todo-due").value;
-        const project = document.getElementById("todo-project").value;
-
-        if(priority == null){
-            alert("Set a priority for your to-do item");
-        }
-
-        else{
-            createTodoList(title, description, dueDate, priority, "false", project, todoList);
-            console.log(`todolist ${todoList}`);
-        }
-    })
 }
 
-//purely DOM related
 function openCloseSidebar(){
     const menuButton = document.querySelector(".menu-button");
     const mainPanel = document.querySelector(".main-panel");
@@ -168,7 +194,7 @@ function openAddTaskModal(todoList){
                     <div class = "modal-container">
                         <legend>*Project:</legend>
                         <select class = 'todo-project' required id = 'todo-project'>
-                            <option>Inbox</option>
+                            <option value = "inbox">Inbox</option>
                             <option>Inbox</option>
                         </select>
                     </div>
@@ -184,8 +210,24 @@ function openAddTaskModal(todoList){
         modalBody.style.transform = "translateY(0)";
 
         closeModal();
-        addTodoItem(todoList);
+        stylePriorityButton();
+        saveTodoItem(todoList);
     })
+}
+
+function clearModal(){
+    document.getElementById("todo-title").value = "";
+    document.getElementById("todo-description").value = "";
+    document.getElementById("todo-due").value = "";
+    document.getElementById("todo-project").value = "inbox";
+
+    const low = document.getElementById('low');
+    const high = document.getElementById('high');
+    const med = document.getElementById('med');
+
+    med.classList.remove("button-selected");
+    high.classList.remove("button-selected");
+    low.classList.remove("button-selected");
 }
 
 (function(){
