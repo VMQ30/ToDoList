@@ -200,19 +200,66 @@ main{
 
 .task-content{
     height: 60vh;
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .task-content p{
     color:rgb(97, 136, 255);
     line-height: 55px;
-    border-bottom: solid 2px;
-    border-bottom-color: rgb(155, 180, 255);
-    width:100%;
     font-family: "ShadowsIntoLight";
     font-size: 30px;
     font-weight:500;
+    margin-left: 10px;
 }
+
+.task-item{
+    display: flex;
+    border-bottom: solid 2px;
+    border-bottom-color: rgb(155, 180, 255);
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-item div{
+    display: flex;
+}
+
+.task-item button{
+    font-size: 1em;
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    border-radius: 3px;
+    width: 5vw;
+    height: 2em;
+    margin-right: 20px;
+}
+
+.delete{
+    background-color: rgb(193, 34, 34);
+    color:white;
+}
+
+.edit{
+    background-color: rgb(97, 136, 255);
+    color:white;
+}
+
+.delete:hover{
+    background-color: rgb(255, 72, 72);
+    border:none;
+    box-shadow: 0 3px 7px rgba(0,0,0,0.4);
+}
+
+.edit:hover{
+    background-color: rgb(148, 175, 255);
+    border:none;
+    box-shadow: 0 3px 7px rgba(0,0,0,0.4);
+}
+
+/* .complete{
+
+} */
 
 ::-webkit-scrollbar{
     width:10px;
@@ -423,3 +470,6 @@ button{
 .modal::selection{
     background-color: rgb(255, 72, 72);
 }
+
+
+

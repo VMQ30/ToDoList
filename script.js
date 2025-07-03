@@ -86,6 +86,10 @@ function getNewTodoValues(){
     return{title, description, dueDate, project};
 }
 
+function deleteTask(index, todoList){
+    todoList.splice(index, 1);
+    localStorage.setItem("todoList", JSON.stringify(todoList));
+}
 
 
 
@@ -103,10 +107,39 @@ function showAllTask(todoList){
             if(index == 0){
                 numberOfTask = 0;
             }
+
+            const taskItem = document.createElement("div");
+            taskItem.classList.add("task-item");
+
+            const div1 = document.createElement("div");
+            const div2 = document.createElement("div");
+
+            const completeCheckbox = document.createElement("input");
+            completeCheckbox.type = "checkbox";
+            completeCheckbox.classList.add("complete");
+
             const title = item.title;
             const todoItem = document.createElement("p");
             todoItem.textContent = title;
-            taskList.appendChild(todoItem);
+
+            div1.appendChild(completeCheckbox);
+            div1.appendChild(todoItem);
+
+            const deleteButton = document.createElement("button");
+            deleteButton.classList.add("delete");
+            deleteButton.textContent = "Delete"
+
+            const editButton = document.createElement("button");
+            editButton.classList.add("edit");
+            editButton.textContent = "Edit";
+
+            div2.appendChild(deleteButton);
+            div2.appendChild(editButton);
+
+            taskItem.appendChild(div1);
+            taskItem.appendChild(div2);
+
+            taskList.appendChild(taskItem);
             numberOfTask++;
         })
         mainPanelHeader("All Tasks", numberOfTask, todoList);
@@ -131,10 +164,38 @@ function showTodayTask(todoList){
             dueDate = dueDate.toDateString();
 
             if (dateToday.toDateString() == dueDate){
+                const taskItem = document.createElement("div");
+                taskItem.classList.add("task-item");
+
+                const div1 = document.createElement("div");
+                const div2 = document.createElement("div");
+
+                const completeCheckbox = document.createElement("input");
+                completeCheckbox.type = "checkbox";
+                completeCheckbox.classList.add("complete");
+
                 const title = item.title;
                 const todoItem = document.createElement("p");
                 todoItem.textContent = title;
-                taskList.appendChild(todoItem);
+
+                div1.appendChild(completeCheckbox);
+                div1.appendChild(todoItem);
+
+                const deleteButton = document.createElement("button");
+                deleteButton.classList.add("delete");
+                deleteButton.textContent = "Delete"
+
+                const editButton = document.createElement("button");
+                editButton.classList.add("edit");
+                editButton.textContent = "Edit";
+
+                div2.appendChild(deleteButton);
+                div2.appendChild(editButton);
+
+                taskItem.appendChild(div1);
+                taskItem.appendChild(div2);
+
+                taskList.appendChild(taskItem);
                 numberOfTask++;
             }
             
@@ -156,10 +217,38 @@ function showImportantTask(todoList){
             }
 
             if(item.priority == 'high'){
+                const taskItem = document.createElement("div");
+                taskItem.classList.add("task-item");
+
+                const div1 = document.createElement("div");
+                const div2 = document.createElement("div");
+
+                const completeCheckbox = document.createElement("input");
+                completeCheckbox.type = "checkbox";
+                completeCheckbox.classList.add("complete");
+
                 const title = item.title;
                 const todoItem = document.createElement("p");
                 todoItem.textContent = title;
-                taskList.appendChild(todoItem);
+
+                div1.appendChild(completeCheckbox);
+                div1.appendChild(todoItem);
+
+                const deleteButton = document.createElement("button");
+                deleteButton.classList.add("delete");
+                deleteButton.textContent = "Delete"
+
+                const editButton = document.createElement("button");
+                editButton.classList.add("edit");
+                editButton.textContent = "Edit";
+
+                div2.appendChild(deleteButton);
+                div2.appendChild(editButton);
+
+                taskItem.appendChild(div1);
+                taskItem.appendChild(div2);
+
+                taskList.appendChild(taskItem);
                 numberOfTask++;
             }
         })
@@ -167,6 +256,7 @@ function showImportantTask(todoList){
     })
 
 }
+
 function mainPanelHeader(title, numberOfTask, todoList){
     const number = numberOfTask.toString();
     const headers = document.querySelector('.headers');
