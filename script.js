@@ -95,30 +95,71 @@ function getNewTodoValues(){
 function showAllTask(todoList){
     const allButton = document.querySelector(".all");
     const taskList = document.querySelector(".task-content");
+    let numberOfTask = 0;
 
     allButton.addEventListener("click", () =>{
         taskList.innerHTML = "";
-
-        todoList.forEach((item) =>{
+        todoList.forEach((item, index) =>{
+            if(index == 0){
+                numberOfTask = 0;
+            }
             const title = item.title;
             const todoItem = document.createElement("p");
             todoItem.textContent = title;
             taskList.appendChild(todoItem);
+            numberOfTask++;
         })
+        mainPanelHeader("All Tasks", numberOfTask, todoList);
+    })    
+}
+
+function showTodayTask(todoList){
+    const todayButton = document.querySelector(".today");
+    const taskList = document.querySelector(".task-content");
+    let numberOfTask = 0;
+    const dateToday = new Date();
+
+    console.log(dateToday.toDateString())
+    
+    todayButton.addEventListener("click", () =>{
+        taskList.innerHTML = "";
+        todoList.forEach((item, index) =>{
+            if(index == 0){
+                numberOfTask = 0;
+            }
+
+            let dueDate = new Date(item.dueDate)
+            dueDate = dueDate.toDateString();
+
+            if (dateToday.toDateString() == dueDate){
+                const title = item.title;
+                const todoItem = document.createElement("p");
+                todoItem.textContent = title;
+                taskList.appendChild(todoItem);
+                numberOfTask++;
+            }
+
+            console.log(dueDate);
+            
+        })
+        mainPanelHeader("Today's Tasks", numberOfTask, todoList);
     })
 }
 
-function mainPanelHeader(){
-    const mainPanel = document.querySelector('main-panel');
-    mainPanel.innerHtml = 
+function mainPanelHeader(title, numberOfTask, todoList){
+    const number = numberOfTask.toString();
+    const headers = document.querySelector('.headers');
+    headers.innerHTML = 
     `<div class = "header">
         <h1>${title}</h1>
     </div>
 
     <div class = "task-header">
-        <h2>Tasks(${numberOfTask})</h2>
+        <h2>Tasks(${number})</h2>
         <button class = "add-task">+</button>
     </div>`
+
+    openAddTaskModal(todoList);
 }
 
 function stylePriorityButton(){
@@ -212,7 +253,7 @@ function openAddTaskModal(todoList){
                 <div class = "modal-column2">
                     <div class = "modal-container">
                         <label for="todo-due">*Due Date:</label>
-                        <input type="datetime-local" required name="todo-due" id="todo-due">
+                        <input type="date" required name="todo-due" id="todo-due">
                     </div>
 
                     <div class = "modal-container-button">
@@ -268,6 +309,7 @@ function clearModal(){
     openCloseSidebar();
     openAddTaskModal(todoList);
     showAllTask(todoList);
+    showTodayTask(todoList);
 })();
 
 
