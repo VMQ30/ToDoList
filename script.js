@@ -117,9 +117,8 @@ function showTodayTask(todoList){
     const todayButton = document.querySelector(".today");
     const taskList = document.querySelector(".task-content");
     let numberOfTask = 0;
-    const dateToday = new Date();
 
-    console.log(dateToday.toDateString())
+    const dateToday = new Date();
     
     todayButton.addEventListener("click", () =>{
         taskList.innerHTML = "";
@@ -138,14 +137,36 @@ function showTodayTask(todoList){
                 taskList.appendChild(todoItem);
                 numberOfTask++;
             }
-
-            console.log(dueDate);
             
         })
         mainPanelHeader("Today's Tasks", numberOfTask, todoList);
     })
 }
 
+function showImportantTask(todoList){
+    const importantButton = document.querySelector(".important");
+    const taskList = document.querySelector(".task-content");
+    let numberOfTask = 0;
+
+    importantButton.addEventListener("click", () =>{
+        taskList.innerHTML = "";
+        todoList.forEach((item, index) =>{
+            if(index = 0){
+                numberOfTask = 0;
+            }
+
+            if(item.priority == 'high'){
+                const title = item.title;
+                const todoItem = document.createElement("p");
+                todoItem.textContent = title;
+                taskList.appendChild(todoItem);
+                numberOfTask++;
+            }
+        })
+        mainPanelHeader("Important Tasks", numberOfTask, todoList);
+    })
+
+}
 function mainPanelHeader(title, numberOfTask, todoList){
     const number = numberOfTask.toString();
     const headers = document.querySelector('.headers');
@@ -310,6 +331,7 @@ function clearModal(){
     openAddTaskModal(todoList);
     showAllTask(todoList);
     showTodayTask(todoList);
+    showImportantTask(todoList);
 })();
 
 
