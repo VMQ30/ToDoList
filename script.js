@@ -96,18 +96,104 @@ function deleteTask(index, todoList){
 
 //DOM
 
-function showAllTask(todoList){
+function taskButtons(todoList){
     const allButton = document.querySelector(".all");
+    allButton.addEventListener("click", () =>{
+        showAllTask(todoList);
+    })
+
+    const todayButton = document.querySelector(".today");
+    todayButton.addEventListener("click", () =>{
+        showTodayTask(todoList);
+    })
+
+    const importantButton = document.querySelector(".important");
+    importantButton.addEventListener("click", () =>{
+        showImportantTask(todoList);
+    })
+
+    const overdueButton = document.querySelector(".overdue");
+    overdueButton.addEventListener("click", () =>{
+        showOverdurTask(todoList);
+    })
+
+}
+
+function showAllTask(todoList){
+    
     const taskList = document.querySelector(".task-content");
     let numberOfTask = 0;
 
-    allButton.addEventListener("click", () =>{
-        taskList.innerHTML = "";
-        todoList.forEach((item, index) =>{
-            if(index == 0){
-                numberOfTask = 0;
-            }
+    taskList.innerHTML = "";
 
+    todoList.forEach((item, index) =>{
+        if(index == 0){
+            numberOfTask = 0;
+        }
+
+        const taskItem = document.createElement("div");
+        taskItem.classList.add("task-item");
+
+        const div1 = document.createElement("div");
+        const div2 = document.createElement("div");
+
+        const completeCheckbox = document.createElement("input");
+        completeCheckbox.type = "checkbox";
+        completeCheckbox.classList.add("complete");
+
+        const title = item.title;
+        const todoItem = document.createElement("p");
+        todoItem.textContent = title;
+
+        div1.appendChild(completeCheckbox);
+        div1.appendChild(todoItem);
+
+        const deleteButton = document.createElement("button");
+        deleteButton.classList.add("delete");
+        deleteButton.textContent = "Delete"
+
+        const editButton = document.createElement("button");
+        editButton.classList.add("edit");
+        editButton.textContent = "Edit";
+
+        div2.appendChild(deleteButton);
+        div2.appendChild(editButton);
+
+        taskItem.appendChild(div1);
+        taskItem.appendChild(div2);
+
+        taskList.appendChild(taskItem);
+        numberOfTask++;
+
+        deleteButton.addEventListener("click", () => {
+            if(confirm("Are you sure you wish to delete this to-do task?")){
+                deleteTask(index, todoList);
+                showAllTask(todoList);
+            }
+        });
+
+        mainPanelHeader("All Tasks", numberOfTask, todoList);
+    })
+    
+ 
+}
+
+function showTodayTask(todoList){
+    const taskList = document.querySelector(".task-content");
+    let numberOfTask = 0;
+
+    const dateToday = new Date();
+    
+    taskList.innerHTML = "";
+    todoList.forEach((item, index) =>{
+        if(index == 0){
+            numberOfTask = 0;
+        }
+
+        let dueDate = new Date(item.dueDate)
+        dueDate = dueDate.toDateString();
+
+        if (dateToday.toDateString() == dueDate){
             const taskItem = document.createElement("div");
             taskItem.classList.add("task-item");
 
@@ -145,138 +231,131 @@ function showAllTask(todoList){
             deleteButton.addEventListener("click", () => {
                 if(confirm("Are you sure you wish to delete this to-do task?")){
                     deleteTask(index, todoList);
-                    showAllTask(todoList);
+                    showTodayTask(todoList);
                 }
             });
-
-        })
-        mainPanelHeader("All Tasks", numberOfTask, todoList);
-    })    
+        }
+        
+    })
+    mainPanelHeader("Today's Tasks", numberOfTask, todoList);
 }
 
-function showTodayTask(todoList){
-    const todayButton = document.querySelector(".today");
+function showOverdurTask(todoList){
     const taskList = document.querySelector(".task-content");
     let numberOfTask = 0;
 
     const dateToday = new Date();
     
-    todayButton.addEventListener("click", () =>{
-        taskList.innerHTML = "";
-        todoList.forEach((item, index) =>{
-            if(index == 0){
-                numberOfTask = 0;
-            }
+    taskList.innerHTML = "";
+    todoList.forEach((item, index) =>{
+        if(index == 0){
+            numberOfTask = 0;
+        }
 
-            let dueDate = new Date(item.dueDate)
-            dueDate = dueDate.toDateString();
+        let dueDate = new Date(item.dueDate)
+        dueDate = dueDate.toDateString();
 
-            if (dateToday.toDateString() == dueDate){
-                const taskItem = document.createElement("div");
-                taskItem.classList.add("task-item");
+        if (dateToday.toDateString() < dueDate){
+            const taskItem = document.createElement("div");
+            taskItem.classList.add("task-item");
 
-                const div1 = document.createElement("div");
-                const div2 = document.createElement("div");
+            const div1 = document.createElement("div");
+            const div2 = document.createElement("div");
 
-                const completeCheckbox = document.createElement("input");
-                completeCheckbox.type = "checkbox";
-                completeCheckbox.classList.add("complete");
+            const completeCheckbox = document.createElement("input");
+            completeCheckbox.type = "checkbox";
+            completeCheckbox.classList.add("complete");
 
-                const title = item.title;
-                const todoItem = document.createElement("p");
-                todoItem.textContent = title;
+            const title = item.title;
+            const todoItem = document.createElement("p");
+            todoItem.textContent = title;
 
-                div1.appendChild(completeCheckbox);
-                div1.appendChild(todoItem);
+            div1.appendChild(completeCheckbox);
+            div1.appendChild(todoItem);
 
-                const deleteButton = document.createElement("button");
-                deleteButton.classList.add("delete");
-                deleteButton.textContent = "Delete"
+            const deleteButton = document.createElement("button");
+            deleteButton.classList.add("delete");
+            deleteButton.textContent = "Delete"
 
-                const editButton = document.createElement("button");
-                editButton.classList.add("edit");
-                editButton.textContent = "Edit";
+            const editButton = document.createElement("button");
+            editButton.classList.add("edit");
+            editButton.textContent = "Edit";
 
-                div2.appendChild(deleteButton);
-                div2.appendChild(editButton);
+            div2.appendChild(deleteButton);
+            div2.appendChild(editButton);
 
-                taskItem.appendChild(div1);
-                taskItem.appendChild(div2);
+            taskItem.appendChild(div1);
+            taskItem.appendChild(div2);
 
-                taskList.appendChild(taskItem);
-                numberOfTask++;
+            taskList.appendChild(taskItem);
+            numberOfTask++;
 
-                deleteButton.addEventListener("click", () => {
-                    if(confirm("Are you sure you wish to delete this to-do task?")){
-                        deleteTask(index, todoList);
-                        showTodayTask(todoList);
-                    }
-                });
-            }
-            
-        })
-        mainPanelHeader("Today's Tasks", numberOfTask, todoList);
+            deleteButton.addEventListener("click", () => {
+                if(confirm("Are you sure you wish to delete this to-do task?")){
+                    deleteTask(index, todoList);
+                    showTodayTask(todoList);
+                }
+            });
+        }
+        
     })
+    mainPanelHeader("Today's Tasks", numberOfTask, todoList);
 }
 
 function showImportantTask(todoList){
-    const importantButton = document.querySelector(".important");
     const taskList = document.querySelector(".task-content");
     let numberOfTask = 0;
 
-    importantButton.addEventListener("click", () =>{
-        taskList.innerHTML = "";
-        todoList.forEach((item, index) =>{
-            if(index == 0){
-                numberOfTask = 0;
-            }
+    taskList.innerHTML = "";
+    todoList.forEach((item, index) =>{
+        if(index == 0){
+            numberOfTask = 0;
+        }
 
-            if(item.priority == 'high'){
-                const taskItem = document.createElement("div");
-                taskItem.classList.add("task-item");
+        if(item.priority == 'high'){
+            const taskItem = document.createElement("div");
+            taskItem.classList.add("task-item");
 
-                const div1 = document.createElement("div");
-                const div2 = document.createElement("div");
+            const div1 = document.createElement("div");
+            const div2 = document.createElement("div");
 
-                const completeCheckbox = document.createElement("input");
-                completeCheckbox.type = "checkbox";
-                completeCheckbox.classList.add("complete");
+            const completeCheckbox = document.createElement("input");
+            completeCheckbox.type = "checkbox";
+            completeCheckbox.classList.add("complete");
 
-                const title = item.title;
-                const todoItem = document.createElement("p");
-                todoItem.textContent = title;
+            const title = item.title;
+            const todoItem = document.createElement("p");
+            todoItem.textContent = title;
 
-                div1.appendChild(completeCheckbox);
-                div1.appendChild(todoItem);
+            div1.appendChild(completeCheckbox);
+            div1.appendChild(todoItem);
 
-                const deleteButton = document.createElement("button");
-                deleteButton.classList.add("delete");
-                deleteButton.textContent = "Delete"
+            const deleteButton = document.createElement("button");
+            deleteButton.classList.add("delete");
+            deleteButton.textContent = "Delete"
 
-                const editButton = document.createElement("button");
-                editButton.classList.add("edit");
-                editButton.textContent = "Edit";
+            const editButton = document.createElement("button");
+            editButton.classList.add("edit");
+            editButton.textContent = "Edit";
 
-                div2.appendChild(deleteButton);
-                div2.appendChild(editButton);
+            div2.appendChild(deleteButton);
+            div2.appendChild(editButton);
 
-                taskItem.appendChild(div1);
-                taskItem.appendChild(div2);
+            taskItem.appendChild(div1);
+            taskItem.appendChild(div2);
 
-                taskList.appendChild(taskItem);
-                numberOfTask++;
+            taskList.appendChild(taskItem);
+            numberOfTask++;
 
-                deleteButton.addEventListener("click", () => {
-                    if(confirm("Are you sure you wish to delete this to-do task?")){
-                        deleteTask(index, todoList);
-                        showImportantTask(todoList);
-                    }
-                });
-            }
-        })
-        mainPanelHeader("Important Tasks", numberOfTask, todoList);
+            deleteButton.addEventListener("click", () => {
+                if(confirm("Are you sure you wish to delete this to-do task?")){
+                    deleteTask(index, todoList);
+                    showImportantTask(todoList);
+                }
+            });
+        }
     })
-
+    mainPanelHeader("Important Tasks", numberOfTask, todoList);
 }
 
 function mainPanelHeader(title, numberOfTask, todoList){
@@ -440,10 +519,9 @@ function clearModal(){
 (function(){
     let todoList = JSON.parse(localStorage.getItem("todoList")) || [];
     openCloseSidebar();
-    openAddTaskModal(todoList);
+
+    taskButtons(todoList);
     showAllTask(todoList);
-    showTodayTask(todoList);
-    showImportantTask(todoList);
 })();
 
 
