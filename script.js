@@ -91,7 +91,57 @@ function deleteTask(index, todoList){
     localStorage.setItem("todoList", JSON.stringify(todoList));
 }
 
+function showTask(title, description, dueDate, priority, project, todoList){
+    const modal = document.querySelector(".modal-background");
+    const modalBody = document.querySelector(".modal");
+    
+    modalBody.innerHTML = 
+    `<div class = "modal-header">
+        <h1>${title}</h1>
+        <button class = "modal-exit">X</button>
+    </div>
 
+    <form>
+        <div class = "modal-body">
+            <div class = "modal-column1">
+                <div class = "modal-container">
+                    <label for="todo-title">Title:</label>
+                    <input type="text" required name="todo-title" id="todo-title" value = "${title}" readonly>
+                </div>
+
+                <div class = "modal-container">
+                    <label for="todo-description">Description:</label>
+                    <textarea name="todo-description" required class = "todo-description" id="todo-description" readonly>${description}</textarea>
+                </div>
+            </div>
+
+            <div class = "modal-column2">
+                <div class = "modal-container">
+                    <label for="todo-due">Due Date:</label>
+                    <input type="date" required name="todo-due" id="todo-due" readonly value = "${new Date(dueDate).toISOString().split('T')[0]}">
+                </div>
+
+                <div class = "modal-container">
+                    <label for="todo-title">Priority:</label>
+                    <input type = "text" readonly value = ${priority}>
+                </div>
+
+                <div class = "modal-container">
+                    <label for="todo-title">Project:</label>
+                    <input type = "text" readonly value = ${project}>
+                </div>
+            </div>
+        </div>
+
+    </form>`;
+    
+    modal.style.transform = "translateY(0)";
+    modalBody.style.transform = "translateY(0)";
+
+    closeModal();
+    stylePriorityButton();
+    saveTodoItem(todoList);
+}
 
 
 //DOM
@@ -114,7 +164,7 @@ function taskButtons(todoList){
 
     const overdueButton = document.querySelector(".overdue");
     overdueButton.addEventListener("click", () =>{
-        showOverdurTask(todoList);
+        showOverdueTask(todoList);
     })
 
 }
@@ -152,18 +202,23 @@ function showAllTask(todoList){
         deleteButton.classList.add("delete");
         deleteButton.textContent = "Delete"
 
-        const editButton = document.createElement("button");
-        editButton.classList.add("edit");
-        editButton.textContent = "Edit";
+        const showButton = document.createElement("button");
+        showButton.classList.add("edit");
+        showButton.textContent = "More";
 
         div2.appendChild(deleteButton);
-        div2.appendChild(editButton);
+        div2.appendChild(showButton);
 
         taskItem.appendChild(div1);
         taskItem.appendChild(div2);
 
         taskList.appendChild(taskItem);
         numberOfTask++;
+
+        dueDate = new Date(item.dueDate)
+        showButton.addEventListener("click", () =>{
+            showTask(item.title, item.description, dueDate, item.priority, item.project, todoList);
+        })
 
         deleteButton.addEventListener("click", () => {
             if(confirm("Are you sure you wish to delete this to-do task?")){
@@ -215,18 +270,22 @@ function showTodayTask(todoList){
             deleteButton.classList.add("delete");
             deleteButton.textContent = "Delete"
 
-            const editButton = document.createElement("button");
-            editButton.classList.add("edit");
-            editButton.textContent = "Edit";
+            const showButton = document.createElement("button");
+            showButton.classList.add("edit");
+            showButton.textContent = "More";
 
             div2.appendChild(deleteButton);
-            div2.appendChild(editButton);
+            div2.appendChild(showButton);
 
             taskItem.appendChild(div1);
             taskItem.appendChild(div2);
 
             taskList.appendChild(taskItem);
             numberOfTask++;
+
+            showButton.addEventListener("click", () =>{
+                showTask(item.title, item.description, dueDate, item.priority, item.project, todoList);
+            })
 
             deleteButton.addEventListener("click", () => {
                 if(confirm("Are you sure you wish to delete this to-do task?")){
@@ -240,7 +299,7 @@ function showTodayTask(todoList){
     mainPanelHeader("Today's Tasks", numberOfTask, todoList);
 }
 
-function showOverdurTask(todoList){
+function showOverdueTask(todoList){
     const taskList = document.querySelector(".task-content");
     let numberOfTask = 0;
 
@@ -255,7 +314,7 @@ function showOverdurTask(todoList){
         let dueDate = new Date(item.dueDate)
         dueDate = dueDate.toDateString();
 
-        if (dateToday.toDateString() < dueDate){
+        if (new Date(item.dueDate).setHours(0,0,0,0) < dateToday.setHours(0,0,0,0)){
             const taskItem = document.createElement("div");
             taskItem.classList.add("task-item");
 
@@ -277,18 +336,22 @@ function showOverdurTask(todoList){
             deleteButton.classList.add("delete");
             deleteButton.textContent = "Delete"
 
-            const editButton = document.createElement("button");
-            editButton.classList.add("edit");
-            editButton.textContent = "Edit";
+            const showButton = document.createElement("button");
+            showButton.classList.add("edit");
+            showButton.textContent = "More";
 
             div2.appendChild(deleteButton);
-            div2.appendChild(editButton);
+            div2.appendChild(showButton);
 
             taskItem.appendChild(div1);
             taskItem.appendChild(div2);
 
             taskList.appendChild(taskItem);
             numberOfTask++;
+
+            showButton.addEventListener("click", () =>{
+                showTask(item.title, item.description, dueDate, item.priority, item.project, todoList);
+            })
 
             deleteButton.addEventListener("click", () => {
                 if(confirm("Are you sure you wish to delete this to-do task?")){
@@ -334,18 +397,22 @@ function showImportantTask(todoList){
             deleteButton.classList.add("delete");
             deleteButton.textContent = "Delete"
 
-            const editButton = document.createElement("button");
-            editButton.classList.add("edit");
-            editButton.textContent = "Edit";
+            const showButton = document.createElement("button");
+            showButton.classList.add("edit");
+            showButton.textContent = "More";
 
             div2.appendChild(deleteButton);
-            div2.appendChild(editButton);
+            div2.appendChild(showButton);
 
             taskItem.appendChild(div1);
             taskItem.appendChild(div2);
 
             taskList.appendChild(taskItem);
             numberOfTask++;
+
+            showButton.addEventListener("click", () =>{
+                showTask(item.title, item.description, dueDate, item.priority, item.project, todoList);
+            })
 
             deleteButton.addEventListener("click", () => {
                 if(confirm("Are you sure you wish to delete this to-do task?")){
