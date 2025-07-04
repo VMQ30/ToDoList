@@ -1,16 +1,7 @@
 class Project{
-    constructor(name, todoArray){
+    constructor(name){
         this.name = name;
-        this.todoArray = todoArray;
-    }
-
-    addTodo(newItem){
-        this.todoArray.push(newItem);
-    }
-    removeTodo(index){
-        this.todoArray.splice(index, 1);
-    }
-    
+    }    
 }
 
 class Todo{
@@ -24,9 +15,10 @@ class Todo{
     }   
 }
 
-function createProjectList(projectList, projectName){
-    const newProject = new Project(projectName, []);
+function createProjectList(projectName, projectList){
+    const newProject = new Project(projectName);
     projectList.push(newProject);
+    localStorage.setItem("projectList", JSON.stringify(projectList));
 }
 
 function createTodoList(title, description, dueDate, priority, haveFinished, project, todoList){
@@ -145,6 +137,14 @@ function showTask(title, description, dueDate, priority, project, todoList){
 
 
 //DOM
+
+function addProject(projectList){
+    const addProjectButton = document.querySelector('.add-projects');
+    addProjectButton.addEventListener("click", () =>{
+        let projectName = prompt("Enter Project Name");
+        createProjectList(projectName, projectList);
+    })
+}
 
 function taskButtons(todoList){
     const allButton = document.querySelector(".all");
@@ -585,10 +585,13 @@ function clearModal(){
 
 (function(){
     let todoList = JSON.parse(localStorage.getItem("todoList")) || [];
+    let projectList = JSON.parse(localStorage.getItem("projectList")) || [];
+    
     openCloseSidebar();
 
     taskButtons(todoList);
     showAllTask(todoList);
+    addProject(projectList);
 })();
 
 
