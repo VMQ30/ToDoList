@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+<script defer src="main.js"></script></head>
+<body>
+    <header>
+        <button class="menu-button" aria-label="Menu">
+            <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width="30" height="30" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                stroke-width="2" 
+                stroke-linecap="round" 
+                stroke-linejoin="round"
+            >
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+            </svg>
+        </button>
+        <h1>ExecTasks</h1>
+        <a href = "https://github.com/VMQ30/ToDoList" class = 'source'>Source</a>
+    </header>
+
+    <aside class = "sidebar">
+        <div class = "home">
+            <div class = "home-header">
+                <h3>Home</h3>
+            </div>
+
+            <div class = "home-buttons">
+                <button class = "today">Today</button>
+                <button class = "all">All</button>
+                <button class = "important">Important</button>
+                <button class = "completed">Completed</button>
+                <button class = "overdue">Overdue</button>
+            </div>
+        </div>
+
+        <div class = "projects">
+            <div class = "project-header">
+                <h3>Projects</h3>
+                <button class = "add-projects">+</button>
+            </div>
+
+            <div class = "project-list">
+                <button class = "delete-project">Delete Project</button>
+            </div>
+        </div>
+    </aside>
+
+    <main class = 'main-panel'>
+        <div class = "headers">
+            <div class = "header">
+                <h1>Your Tasks</h1>
+            </div>
+
+            <div class = "task-header">
+                <h2>Tasks()</h2>
+                <button class = "add-task">+</button>
+            </div>
+        </div>
+        
+        <div class = "task-content">
+            <div class = "task-item">
+                <div>
+                    <input type = "checkbox" class = "complete">
+                    <p>Task</p>
+                </div>
+                <div>
+                    <button class = "delete">Delete</button>
+                    <button class = "edit">Edit</button>
+                </div>
+            </div>
+            
+
+    </main>
+    
+    <div class = "modal-background">
+        <div class = "modal">
+            
+        </div>
+    </div>
+    <script src = "script.js"></script>
+</body>
+</html>
