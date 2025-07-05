@@ -135,6 +135,24 @@ function showTask(title, description, dueDate, priority, project, todoList){
     saveTodoItem(todoList);
 }
 
+function deleteProject(projectList){
+    const deleteProjButton = document.querySelector(".delete-project");
+    deleteProjButton.addEventListener("click", () =>{
+        let projectName = prompt("Which Project do you wish to remove?");
+        
+        if(projectName != null){
+            projectList.forEach((proj, index) =>{
+                if(proj.name == projectName){
+                    const userChoice = confirm(`Are you sure you want to remove Project ${projectName}?`);
+                    if(userChoice){
+                        projectList.splice(index, 1);
+                        localStorage.setItem("projectList", JSON.stringify(projectList));
+                    }
+                }
+            })
+        }
+    })
+}
 
 //DOM
 
@@ -142,7 +160,9 @@ function addProject(projectList){
     const addProjectButton = document.querySelector('.add-projects');
     addProjectButton.addEventListener("click", () =>{
         let projectName = prompt("Enter Project Name");
-        createProjectList(projectName, projectList);
+        if(projectName != null){
+            createProjectList(projectName, projectList);
+        }
     })
 }
 
@@ -543,6 +563,7 @@ function openCloseSidebar(projectList){
     })
 
     addProjectButtons(projectList);
+    deleteProject(projectList);
 }
 
 function addProjectButtons(projectList){
