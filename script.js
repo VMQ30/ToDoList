@@ -58,7 +58,7 @@ function getPriority(){
     return () => priority;
 }
 
-function saveTodoItem(todoList){
+function saveTodoItem(todoList, projectList){
     const getPriorityValue = getPriority();
     const saveButton = document.querySelector(".save-todo");
     saveButton.addEventListener("click", (event) =>{
@@ -66,6 +66,7 @@ function saveTodoItem(todoList){
         addTodoItem(todoList, getPriorityValue);
         clearModal();
         alert("Successfully added to-do item in your list!");
+        showAllTask(todoList, projectList);
     })
 }
 
@@ -83,7 +84,7 @@ function deleteTask(index, todoList){
     localStorage.setItem("todoList", JSON.stringify(todoList));
 }
 
-function showTask(title, description, dueDate, priority, project, todoList){
+function showTask(title, description, dueDate, priority, project, todoList, projectList){
     const modal = document.querySelector(".modal-background");
     const modalBody = document.querySelector(".modal");
     
@@ -132,14 +133,15 @@ function showTask(title, description, dueDate, priority, project, todoList){
 
     closeModal();
     stylePriorityButton();
-    saveTodoItem(todoList);
+    saveTodoItem(todoList, projectList);
 }
 
 function deleteProject(projectList){
     const deleteProjButton = document.querySelector(".delete-project");
     deleteProjButton.addEventListener("click", () =>{
         let projectName = prompt("Which Project do you wish to remove?");
-        
+        let projectFound = false;
+
         if(projectName != null){
             projectList.forEach((proj, index) =>{
                 if(proj.name == projectName){
@@ -148,8 +150,14 @@ function deleteProject(projectList){
                         projectList.splice(index, 1);
                         localStorage.setItem("projectList", JSON.stringify(projectList));
                     }
+                    projectFound = true;
+                    return;
                 }
             })
+        }
+
+        if(!projectFound){
+            alert(`Project ${projectName} not found`);
         }
     })
 }
@@ -187,6 +195,11 @@ function taskButtons(todoList, projectList){
         showOverdueTask(todoList, projectList);
     })
 
+    const completeButton = document.querySelector(".completed");
+    completeButton.addEventListener("click", () =>{
+        showCompleteTask(todoList, projectList);
+    })
+
 }
 
 function showAllTask(todoList, projectList){
@@ -197,78 +210,11 @@ function showAllTask(todoList, projectList){
     taskList.innerHTML = "";
 
     todoList.forEach((item, index) =>{
-        if(index == 0){
-            numberOfTask = 0;
-        }
-
-        const taskItem = document.createElement("div");
-        taskItem.classList.add("task-item");
-
-        const div1 = document.createElement("div");
-        const div2 = document.createElement("div");
-
-        const completeCheckbox = document.createElement("input");
-        completeCheckbox.type = "checkbox";
-        completeCheckbox.classList.add("complete");
-
-        const title = item.title;
-        const todoItem = document.createElement("p");
-        todoItem.textContent = title;
-
-        div1.appendChild(completeCheckbox);
-        div1.appendChild(todoItem);
-
-        const deleteButton = document.createElement("button");
-        deleteButton.classList.add("delete");
-        deleteButton.textContent = "Delete"
-
-        const showButton = document.createElement("button");
-        showButton.classList.add("edit");
-        showButton.textContent = "More";
-
-        div2.appendChild(deleteButton);
-        div2.appendChild(showButton);
-
-        taskItem.appendChild(div1);
-        taskItem.appendChild(div2);
-
-        taskList.appendChild(taskItem);
-        numberOfTask++;
-
-        dueDate = new Date(item.dueDate)
-        showButton.addEventListener("click", () =>{
-            showTask(item.title, item.description, dueDate, item.priority, item.project, todoList);
-        })
-
-        deleteButton.addEventListener("click", () => {
-            if(confirm("Are you sure you wish to delete this to-do task?")){
-                deleteTask(index, todoList);
-                showAllTask(todoList);
+        if(item.haveFinished == 'false'){
+            if(index == 0){
+                numberOfTask = 0;
             }
-        });
 
-        mainPanelHeader("All Tasks", numberOfTask, todoList, projectList);
-    })
-    
- 
-}
-
-function showTodayTask(todoList, projectList){
-    const taskList = document.querySelector(".task-content");
-    let numberOfTask = 0;
-
-    const dateToday = new Date();
-    
-    taskList.innerHTML = "";
-    todoList.forEach((item, index) =>{
-        if(index == 0){
-            numberOfTask = 0;
-        }
-
-        let dueDate = new Date(item.dueDate)
-        dueDate = dueDate.toDateString();
-
-        if (dateToday.toDateString() == dueDate){
             const taskItem = document.createElement("div");
             taskItem.classList.add("task-item");
 
@@ -303,18 +249,109 @@ function showTodayTask(todoList, projectList){
             taskList.appendChild(taskItem);
             numberOfTask++;
 
+            dueDate = new Date(item.dueDate)
             showButton.addEventListener("click", () =>{
-                showTask(item.title, item.description, dueDate, item.priority, item.project, todoList);
+                showTask(item.title, item.description, dueDate, item.priority, item.project, todoList, projectList);
             })
 
             deleteButton.addEventListener("click", () => {
                 if(confirm("Are you sure you wish to delete this to-do task?")){
                     deleteTask(index, todoList);
-                    showTodayTask(todoList);
+                    showAllTask(todoList);
                 }
             });
+
+            completeCheckbox.addEventListener("change", () =>{
+                if(completeCheckbox.checked == true){
+                    item.haveFinished = 'true';
+                    localStorage.setItem("todoList", JSON.stringify(todoList));
+                }
+                if(completeCheckbox.checked == false){
+                    item.haveFinished = 'false';
+                    localStorage.setItem("todoList", JSON.stringify(todoList));
+                }
+            })
         }
-        
+
+        mainPanelHeader("All Tasks", numberOfTask, todoList, projectList);
+    })
+}
+
+function showTodayTask(todoList, projectList){
+    const taskList = document.querySelector(".task-content");
+    let numberOfTask = 0;
+
+    const dateToday = new Date();
+    
+    taskList.innerHTML = "";
+    todoList.forEach((item, index) =>{
+
+        if(item.haveFinished == 'false'){
+            if(index == 0){
+                numberOfTask = 0;
+            }
+
+            let dueDate = new Date(item.dueDate)
+            dueDate = dueDate.toDateString();
+
+            if (dateToday.toDateString() == dueDate){
+                const taskItem = document.createElement("div");
+                taskItem.classList.add("task-item");
+
+                const div1 = document.createElement("div");
+                const div2 = document.createElement("div");
+
+                const completeCheckbox = document.createElement("input");
+                completeCheckbox.type = "checkbox";
+                completeCheckbox.classList.add("complete");
+
+                const title = item.title;
+                const todoItem = document.createElement("p");
+                todoItem.textContent = title;
+
+                div1.appendChild(completeCheckbox);
+                div1.appendChild(todoItem);
+
+                const deleteButton = document.createElement("button");
+                deleteButton.classList.add("delete");
+                deleteButton.textContent = "Delete"
+
+                const showButton = document.createElement("button");
+                showButton.classList.add("edit");
+                showButton.textContent = "More";
+
+                div2.appendChild(deleteButton);
+                div2.appendChild(showButton);
+
+                taskItem.appendChild(div1);
+                taskItem.appendChild(div2);
+
+                taskList.appendChild(taskItem);
+                numberOfTask++;
+
+                showButton.addEventListener("click", () =>{
+                    showTask(item.title, item.description, dueDate, item.priority, item.project, todoList, projectList);
+                })
+
+                deleteButton.addEventListener("click", () => {
+                    if(confirm("Are you sure you wish to delete this to-do task?")){
+                        deleteTask(index, todoList);
+                        showTodayTask(todoList);
+                    }
+                });
+
+                completeCheckbox.addEventListener("change", () =>{
+                    if(completeCheckbox.checked == true){
+                        item.haveFinished = 'true';
+                        localStorage.setItem("todoList", JSON.stringify(todoList));
+                    }
+                    if(completeCheckbox.checked == false){
+                        item.haveFinished = 'false';
+                        localStorage.setItem("todoList", JSON.stringify(todoList));
+                    }
+                })
+            }
+        }
     })
     mainPanelHeader("Today's Tasks", numberOfTask, todoList, projectList);
 }
@@ -327,65 +364,150 @@ function showOverdueTask(todoList, projectList){
     
     taskList.innerHTML = "";
     todoList.forEach((item, index) =>{
-        if(index == 0){
-            numberOfTask = 0;
+        if(item.haveFinished == 'false'){
+            if(index == 0){
+                numberOfTask = 0;
+            }
+
+            let dueDate = new Date(item.dueDate)
+            dueDate = dueDate.toDateString();
+
+            if (new Date(item.dueDate).setHours(0,0,0,0) < dateToday.setHours(0,0,0,0)){
+                const taskItem = document.createElement("div");
+                taskItem.classList.add("task-item");
+
+                const div1 = document.createElement("div");
+                const div2 = document.createElement("div");
+
+                const completeCheckbox = document.createElement("input");
+                completeCheckbox.type = "checkbox";
+                completeCheckbox.classList.add("complete");
+
+                const title = item.title;
+                const todoItem = document.createElement("p");
+                todoItem.textContent = title;
+
+                div1.appendChild(completeCheckbox);
+                div1.appendChild(todoItem);
+
+                const deleteButton = document.createElement("button");
+                deleteButton.classList.add("delete");
+                deleteButton.textContent = "Delete"
+
+                const showButton = document.createElement("button");
+                showButton.classList.add("edit");
+                showButton.textContent = "More";
+
+                div2.appendChild(deleteButton);
+                div2.appendChild(showButton);
+
+                taskItem.appendChild(div1);
+                taskItem.appendChild(div2);
+
+                taskList.appendChild(taskItem);
+                numberOfTask++;
+
+                showButton.addEventListener("click", () =>{
+                    showTask(item.title, item.description, dueDate, item.priority, item.project, todoList, projectList);
+                })
+
+                deleteButton.addEventListener("click", () => {
+                    if(confirm("Are you sure you wish to delete this to-do task?")){
+                        deleteTask(index, todoList);
+                        showTodayTask(todoList);
+                    }
+                });
+
+                completeCheckbox.addEventListener("change", () =>{
+                    if(completeCheckbox.checked == true){
+                        item.haveFinished = 'true';
+                        localStorage.setItem("todoList", JSON.stringify(todoList));
+                    }
+                    if(completeCheckbox.checked == false){
+                        item.haveFinished = 'false';
+                        localStorage.setItem("todoList", JSON.stringify(todoList));
+                    }
+                })
+            }
         }
-
-        let dueDate = new Date(item.dueDate)
-        dueDate = dueDate.toDateString();
-
-        if (new Date(item.dueDate).setHours(0,0,0,0) < dateToday.setHours(0,0,0,0)){
-            const taskItem = document.createElement("div");
-            taskItem.classList.add("task-item");
-
-            const div1 = document.createElement("div");
-            const div2 = document.createElement("div");
-
-            const completeCheckbox = document.createElement("input");
-            completeCheckbox.type = "checkbox";
-            completeCheckbox.classList.add("complete");
-
-            const title = item.title;
-            const todoItem = document.createElement("p");
-            todoItem.textContent = title;
-
-            div1.appendChild(completeCheckbox);
-            div1.appendChild(todoItem);
-
-            const deleteButton = document.createElement("button");
-            deleteButton.classList.add("delete");
-            deleteButton.textContent = "Delete"
-
-            const showButton = document.createElement("button");
-            showButton.classList.add("edit");
-            showButton.textContent = "More";
-
-            div2.appendChild(deleteButton);
-            div2.appendChild(showButton);
-
-            taskItem.appendChild(div1);
-            taskItem.appendChild(div2);
-
-            taskList.appendChild(taskItem);
-            numberOfTask++;
-
-            showButton.addEventListener("click", () =>{
-                showTask(item.title, item.description, dueDate, item.priority, item.project, todoList);
-            })
-
-            deleteButton.addEventListener("click", () => {
-                if(confirm("Are you sure you wish to delete this to-do task?")){
-                    deleteTask(index, todoList);
-                    showTodayTask(todoList);
-                }
-            });
-        }
-        
     })
-    mainPanelHeader("Today's Tasks", numberOfTask, todoList, projectList);
+    mainPanelHeader("Overdue Tasks", numberOfTask, todoList, projectList);
 }
 
 function showImportantTask(todoList, projectList){
+    const taskList = document.querySelector(".task-content");
+    let numberOfTask = 0;
+
+    taskList.innerHTML = "";
+    todoList.forEach((item, index) =>{
+        if(item.haveFinished == 'false'){
+            if(index == 0){
+                numberOfTask = 0;
+            }
+
+            if(item.priority == 'high'){
+                const taskItem = document.createElement("div");
+                taskItem.classList.add("task-item");
+
+                const div1 = document.createElement("div");
+                const div2 = document.createElement("div");
+
+                const completeCheckbox = document.createElement("input");
+                completeCheckbox.type = "checkbox";
+                completeCheckbox.classList.add("complete");
+
+                const title = item.title;
+                const todoItem = document.createElement("p");
+                todoItem.textContent = title;
+
+                div1.appendChild(completeCheckbox);
+                div1.appendChild(todoItem);
+
+                const deleteButton = document.createElement("button");
+                deleteButton.classList.add("delete");
+                deleteButton.textContent = "Delete"
+
+                const showButton = document.createElement("button");
+                showButton.classList.add("edit");
+                showButton.textContent = "More";
+
+                div2.appendChild(deleteButton);
+                div2.appendChild(showButton);
+
+                taskItem.appendChild(div1);
+                taskItem.appendChild(div2);
+
+                taskList.appendChild(taskItem);
+                numberOfTask++;
+
+                showButton.addEventListener("click", () =>{
+                    showTask(item.title, item.description, dueDate, item.priority, item.project, todoList, projectList);
+                })
+
+                deleteButton.addEventListener("click", () => {
+                    if(confirm("Are you sure you wish to delete this to-do task?")){
+                        deleteTask(index, todoList);
+                        showImportantTask(todoList);
+                    }
+                });
+
+                completeCheckbox.addEventListener("change", () =>{
+                    if(completeCheckbox.checked == true){
+                        item.haveFinished = 'true';
+                        localStorage.setItem("todoList", JSON.stringify(todoList));
+                    }
+                    if(completeCheckbox.checked == false){
+                        item.haveFinished = 'false';
+                        localStorage.setItem("todoList", JSON.stringify(todoList));
+                    }
+                })
+            }
+        }
+    })
+    mainPanelHeader("Important Tasks", numberOfTask, todoList, projectList);
+}
+
+function showCompleteTask(todoList, projectList){
     const taskList = document.querySelector(".task-content");
     let numberOfTask = 0;
 
@@ -395,7 +517,7 @@ function showImportantTask(todoList, projectList){
             numberOfTask = 0;
         }
 
-        if(item.priority == 'high'){
+        if(item.haveFinished == 'true'){
             const taskItem = document.createElement("div");
             taskItem.classList.add("task-item");
 
@@ -405,6 +527,7 @@ function showImportantTask(todoList, projectList){
             const completeCheckbox = document.createElement("input");
             completeCheckbox.type = "checkbox";
             completeCheckbox.classList.add("complete");
+            completeCheckbox.checked = true;
 
             const title = item.title;
             const todoItem = document.createElement("p");
@@ -431,7 +554,7 @@ function showImportantTask(todoList, projectList){
             numberOfTask++;
 
             showButton.addEventListener("click", () =>{
-                showTask(item.title, item.description, dueDate, item.priority, item.project, todoList);
+                showTask(item.title, item.description, dueDate, item.priority, item.project, todoList, projectList);
             })
 
             deleteButton.addEventListener("click", () => {
@@ -440,17 +563,28 @@ function showImportantTask(todoList, projectList){
                     showImportantTask(todoList);
                 }
             });
+
+            completeCheckbox.addEventListener("change", () =>{
+                if(completeCheckbox.checked == true){
+                    item.haveFinished = 'true';
+                    localStorage.setItem("todoList", JSON.stringify(todoList));
+                }
+                if(completeCheckbox.checked == false){
+                    item.haveFinished = 'false';
+                    localStorage.setItem("todoList", JSON.stringify(todoList));
+                }
+            })
         }
     })
-    mainPanelHeader("Important Tasks", numberOfTask, todoList, projectList);
+    mainPanelHeader("Completed Tasks", numberOfTask, todoList, projectList);
 }
 
-function showProjectTask(projectList, projectName, projectList){
+function showProjectTask(projectList, projectName, todoList){
     const taskList = document.querySelector(".task-content");
     let numberOfTask = 0;
 
     taskList.innerHTML = "";
-    projectList.forEach((item, index) =>{
+    todoList.forEach((item, index) =>{
         if(index == 0){
             numberOfTask = 0;
         }
@@ -491,7 +625,7 @@ function showProjectTask(projectList, projectName, projectList){
             numberOfTask++;
 
             showButton.addEventListener("click", () =>{
-                showTask(item.title, item.description, dueDate, item.priority, item.project, todoList);
+                showTask(item.title, item.description, dueDate, item.priority, item.project, todoList, projectList);
             })
 
             deleteButton.addEventListener("click", () => {
@@ -500,9 +634,20 @@ function showProjectTask(projectList, projectName, projectList){
                     showImportantTask(todoList);
                 }
             });
+
+            completeCheckbox.addEventListener("change", () =>{
+                if(completeCheckbox.checked == true){
+                    item.haveFinished = 'true';
+                    localStorage.setItem("todoList", JSON.stringify(todoList));
+                }
+                if(completeCheckbox.checked == false){
+                    item.haveFinished = 'false';
+                    localStorage.setItem("todoList", JSON.stringify(todoList));
+                }
+            })
         }
     })
-    mainPanelHeader("Important Tasks", numberOfTask, todoList, projectList, projectList);
+    mainPanelHeader(`${projectName} Tasks`, numberOfTask, todoList, projectList, projectList);
 }
 
 function mainPanelHeader(title, numberOfTask, todoList, projectList){
@@ -545,7 +690,7 @@ function stylePriorityButton(){
     })
 }
 
-function openCloseSidebar(projectList){
+function openCloseSidebar(projectList, todoList){
     const menuButton = document.querySelector(".menu-button");
     const mainPanel = document.querySelector(".main-panel");
     let sidebar = document.querySelector(".sidebar");
@@ -562,20 +707,20 @@ function openCloseSidebar(projectList){
         }
     })
 
-    addProjectButtons(projectList);
+    addProjectButtons(projectList, todoList);
     deleteProject(projectList);
 }
 
-function addProjectButtons(projectList){
+function addProjectButtons(projectList, todoList){
     const buttonList = document.querySelector(".project-list");
-    projectList.forEach((project, index) =>{
+    projectList.forEach((project) =>{
         const button = document.createElement("button");
         button.textContent = project.name;
         buttonList.appendChild(button);
 
         const projectName = project.name;
         button.addEventListener("click", () =>{
-            showProjectTask(projectList, projectName)
+            showProjectTask(projectList, projectName, todoList)
         })
     }) 
 }
@@ -666,7 +811,7 @@ function openAddTaskModal(todoList, projectList){
 
         closeModal();
         stylePriorityButton();
-        saveTodoItem(todoList);
+        saveTodoItem(todoList, projectList);
     })
 }
 
@@ -690,10 +835,10 @@ function clearModal(){
     let projectList = JSON.parse(localStorage.getItem("projectList")) || [];
 
     taskButtons(todoList, projectList);
-    showAllTask(todoList);
+    showTodayTask(todoList, projectList);
     addProject(projectList);
 
-    openCloseSidebar(projectList);
+    openCloseSidebar(projectList, todoList);
 })();
 
 
